@@ -37,7 +37,7 @@ def style_ax(ax, title=""):
 
 # LOAD
 print("=" * 60)
-print("STEP 1 – Loading data")
+print("STEP 1 - Loading data")
 print("=" * 60)
 
 games   = pd.read_csv("data/games.csv")
@@ -50,14 +50,14 @@ games["HOME_TEAM_WINS"] = games["HOME_TEAM_WINS"].astype(int)
 
 print(f"  games.csv       : {games.shape[0]:,} rows")
 print(f"  games_details   : {details.shape[0]:,} rows")
-print(f"  Date range      : {games['GAME_DATE_EST'].min().date()} → {games['GAME_DATE_EST'].max().date()}")
+print(f"  Date range      : {games['GAME_DATE_EST'].min().date()} - {games['GAME_DATE_EST'].max().date()}")
 print(f"  Home win %%      : {games['HOME_TEAM_WINS'].mean()*100:.1f}%%")
 
 
 # BUILD REAL TEAM-GAME STATS FROM games_details.csv
 
 print("\n" + "=" * 60)
-print("STEP 2 – Aggregating player box scores → team stats")
+print("STEP 2 - Aggregating player box scores into team stats")
 print("=" * 60)
 
 # Parse minutes (MM:SS or float)
@@ -125,7 +125,7 @@ team_game  = team_game.sort_values(["TEAM_ID","GAME_DATE_EST"]).reset_index(drop
 
 # EDA
 print("\n" + "=" * 60)
-print("STEP 3 – Exploratory Data Analysis")
+print("STEP 3 - Exploratory Data Analysis")
 print("=" * 60)
 
 # Tag win/loss for each team-game row
@@ -195,16 +195,16 @@ sns.heatmap(corr, ax=ax6, cmap="coolwarm", center=0, annot=True, fmt=".1f",
 ax6.tick_params(colors=TEXT_COL, labelsize=7)
 style_ax(ax6, "Feature Correlation")
 
-fig.suptitle("NBA Game Data — EDA from Player Box Scores (2004–2022)",
+fig.suptitle("NBA Game Data - EDA from Player Box Scores (2004-2022)",
              color=TEXT_COL, fontsize=13, fontweight="bold", y=1.01)
 plt.savefig("figures/eda.png", dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
 plt.close()
-print("  Saved → figures/eda.png")
+print("  Saved to figures/eda.png")
 
 
 # ROLLING FEATURE ENGINEERING
 print("\n" + "=" * 60)
-print("STEP 4 – Rolling Feature Engineering")
+print("STEP 4 - Rolling Feature Engineering")
 print("=" * 60)
 
 WINDOW = 10
@@ -268,7 +268,7 @@ print(f"  Train : {len(X_train):,}  |  Val : {len(X_val):,}  |  Test : {len(X_te
 # BASELINES
 
 print("\n" + "=" * 60)
-print("STEP 5 – Baselines")
+print("STEP 5 - Baselines")
 print("=" * 60)
 
 lr = LogisticRegression(max_iter=1000, C=1.0, random_state=SEED)
@@ -290,7 +290,7 @@ for name, pred, proba in [("Logistic Regression", lr_pred, lr_proba),
 # MLP
 
 print("\n" + "=" * 60)
-print("STEP 6 – Training MLP")
+print("STEP 6 - Training MLP")
 print("=" * 60)
 
 class NBAMLP(nn.Module):
@@ -359,7 +359,7 @@ print(f"\n  MLP (proposed) : Acc={mlp_acc:.4f}  F1={mlp_f1:.4f}  AUC={mlp_auc:.4
 # RESULTS FIGURES
 
 print("\n" + "=" * 60)
-print("STEP 7 – Result figures")
+print("STEP 7 - Result figures")
 print("=" * 60)
 
 fig, axes = plt.subplots(1, 3, figsize=(16, 5))
@@ -407,18 +407,18 @@ ax.set_xticklabels(["Away Win","Home Win"], color=TEXT_COL)
 ax.set_yticklabels(["Away Win","Home Win"], color=TEXT_COL, rotation=0)
 ax.set_title("MLP Confusion Matrix", color=TEXT_COL, fontweight="bold")
 
-fig.suptitle("NBA Outcome Prediction – Results (Box Score Features)", color=TEXT_COL,
+fig.suptitle("NBA Outcome Prediction - Results (Box Score Features)", color=TEXT_COL,
              fontsize=13, fontweight="bold", y=1.02)
 plt.tight_layout()
 plt.savefig("figures/results.png", dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
 plt.close()
-print("  Saved → figures/results.png")
+print("  Saved to figures/results.png")
 
 
 # ABLATION STUDY
 
 print("\n" + "=" * 60)
-print("STEP 8 – Ablation Study")
+print("STEP 8 - Ablation Study")
 print("=" * 60)
 
 n_s = len(STAT_COLS)
@@ -461,7 +461,7 @@ eval_subset(idx_all,            "All features (full model)")
 # WINDOW SENSITIVITY
 
 print("\n" + "=" * 60)
-print("STEP 9 – Window sensitivity")
+print("STEP 9 - Window sensitivity")
 print("=" * 60)
 
 window_res = []
@@ -487,7 +487,7 @@ for w in [3, 5, 10, 15, 20]:
     lrw = LogisticRegression(max_iter=500, random_state=SEED).fit(sc2.transform(X2[:t2]), y2[:t2])
     acc = accuracy_score(y2[v2:], lrw.predict(sc2.transform(X2[v2:])))
     window_res.append((w, acc))
-    print(f"    Window={w:2d}  →  Val Acc={acc:.4f}")
+    print(f"    Window={w:2d}  -  Val Acc={acc:.4f}")
 
 fig, ax = plt.subplots(figsize=(6,4))
 fig.patch.set_facecolor("#0d1117"); ax.set_facecolor(PANEL_BG)
@@ -500,7 +500,7 @@ ax.tick_params(colors=TEXT_COL)
 plt.tight_layout()
 plt.savefig("figures/window_sensitivity.png", dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
 plt.close()
-print("  Saved → figures/window_sensitivity.png")
+print("  Saved to figures/window_sensitivity.png")
 
 
 # SUMMARY
